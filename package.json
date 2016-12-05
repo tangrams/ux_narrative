@@ -11,10 +11,10 @@
     "build": "npm run build-bundle -- -o ux_narrative.js && npm run build-minify",
     "build-test": "npm run build-bundle -- -o ux_narrative.test.js",
     "build-debug": "npm run build-bundle -- -o ux_narrative.js",
-    "build-bundle": "$npm browserify src/uxLayers.js -t [ babelify --presets [ es2015 ] ] -s ux_narrative -p browserify-derequire --debug",
+    "build-bundle": "$npm browserify src/uxNarrative.js -t [ babelify --presets [ es2015 ] ] -s ux_narrative -p browserify-derequire --debug",
     "build-minify": "$npm uglifyjs ux_narrative.js -c warnings=false -m -o ux_narrative.min.js && npm run build-size",
     "build-size": "gzip ux_narrative.min.js -c | wc -c | awk '{kb=$1/1024; print kb}' OFMT='%.0fk minified+gzipped'",
-    "watch": "$npm budo src/uxLayers.js:ux_narrative.js --port 8000 --cors --live -- -t [ babelify --presets [ es2015 ] ] -s ux_narrative"
+    "watch": "$npm budo src/uxNarrative.js:ux_narrative.js --port 8000 --cors --live -- -t [ babelify --presets [ es2015 ] ] -s ux_narrative"
   },
   "repository": {
     "type": "git",
