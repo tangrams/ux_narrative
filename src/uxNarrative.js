@@ -23,13 +23,19 @@ L.UxNarrative = L.Control.extend({
         // -------------------------------------------------------------
         var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom ux_narrative-container');
         container.addEventListener('mousedown', function(e) {
+            console.log('mousedown container');
             map.dragging.disable();
+            map.scrollWheelZoom.disable(); 
             e.stopPropagation();
         });
 
         container.addEventListener('mouseup', function(e) {
+            console.log('mouseup container');
             map.dragging.enable();
         });
+
+        // map.on('focus', function() { map.scrollWheelZoom.enable(); });
+        // map.on('blur', function() { map.scrollWheelZoom.disable(); });
 
         // ICON
         // -------------------------------------------------------------
@@ -89,6 +95,20 @@ L.UxNarrative = L.Control.extend({
 
         loadStory (this.options.story); 
         story.style.visibility = "hidden";
+
+        container.addEventListener('mouseover', function() { 
+            console.log('mouseover story');
+            map.scrollWheelZoom.disable(); 
+        });
+
+        map.on('mouseover', function() { 
+            console.log('mouseover map');
+        });
+
+        map.addEventListener('click', function() { 
+            console.log('click map');
+            map.scrollWheelZoom.enable(); 
+        });
 
         function resize_container() {
             if (state_open) {
