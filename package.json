@@ -1,0 +1,66 @@
+{
+  "name": "ux_narrative",
+  "version": "0.0.1",
+  "description": "an experiment on how to tell a story with Leaflet map",
+  "main": "ux_narrative.js",
+  "scripts": {
+    "start": "npm run watch",
+    "test": "npm run lint && npm run build-test && npm run test-local",
+    "test-ci": "npm run lint && npm run build-test && npm run test-remote",
+    "lint": "$(npm)/jshint src/ && jshint test/",
+    "build": "npm run build-bundle -- -o ux_narrative.js && npm run build-minify",
+    "build-test": "npm run build-bundle -- -o ux_narrative.test.js",
+    "build-debug": "npm run build-bundle -- -o ux_narrative.js",
+    "build-bundle": "$npm browserify src/uxLayers.js -t [ babelify --presets [ es2015 ] ] -s ux_narrative -p browserify-derequire --debug",
+    "build-minify": "$npm uglifyjs ux_narrative.js -c warnings=false -m -o ux_narrative.min.js && npm run build-size",
+    "build-size": "gzip ux_narrative.min.js -c | wc -c | awk '{kb=$1/1024; print kb}' OFMT='%.0fk minified+gzipped'",
+    "watch": "$npm budo src/uxLayers.js:ux_narrative.js --port 8000 --cors --live -- -t [ babelify --presets [ es2015 ] ] -s ux_narrative"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tangrams/ux_narrative.git"
+  },
+  "keywords": [
+    "leaflet",
+    "data",
+    "story"
+  ],
+  "author": {
+    "name": "Mapzen",
+    "url": "https://www.mapzen.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tangrams/ux_narrative/issues"
+  },
+  "homepage": "https://github.com/tangrams/ux_narrative/#readme",
+  "devDependencies": {
+    "babelify": "7.3.0",
+    "babel-preset-es2015": "6.16.0",
+    "browserify": "13.0.1",
+    "browserify-derequire": "0.9.4",
+    "budo": "8.2.1",
+    "chai": "1.9.2",
+    "chai-as-promised": "4.1.1",
+    "core-js": "2.4.1",
+    "glob": "4.0.6",
+    "jshint": "jshint/jshint#3a8efa979dbb157bfb5c10b5826603a55a33b9ad",
+    "karma": "0.12.23",
+    "karma-browserify": "5.1.0",
+    "karma-chrome-launcher": "0.1.4",
+    "karma-mocha": "0.1.9",
+    "karma-mocha-reporter": "1.0.0",
+    "karma-sauce-launcher": "tangrams/karma-sauce-launcher#firefox-profiles",
+    "karma-sinon": "1.0.4",
+    "mocha": "1.21.4",
+    "sinon": "1.10.3",
+    "uglify-js": "2.4.14",
+    "yargs": "1.3.2"
+  },
+  "dependencies": {
+    "brfs": "1.4.3",
+    "fetch-ponyfill": "^3.0.2",
+    "marked": "^0.3.6",
+    "waypoints": "^4.0.1"
+  }
+}
