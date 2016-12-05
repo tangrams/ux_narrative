@@ -90,7 +90,7 @@
                     layer.addTo(map);
 
                     // Add layer explorer
-                    map.addControl(L.uxNarrative());
+                    map.addControl(L.uxNarrative({story:'test.md'}));
                 });
 
                 return map;
