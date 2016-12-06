@@ -57,24 +57,28 @@ L.UxNarrative = L.Control.extend({
                                                         handler: function(direction) {
                                                             if (ignore_up && direction == 'up') { return; }
 
+                                                            var options = { animate: true, duration: 1., easeLinearity: 1};
+                                                            if (this.element.hasAttribute('duration')) {
+                                                                options.duration = parseFloat(this.element.getAttribute('duration'));
+                                                            }
+
                                                             if (this.element.hasAttribute('lat')&&
                                                                 this.element.hasAttribute('lng')&&
                                                                 this.element.hasAttribute('zoom')) {
-                                                                var options = { animate: true, duration: 1., easeLinearity: 1};
-
-                                                                if (this.element.hasAttribute('duration')) {
-                                                                    options.duration = parseFloat(this.element.getAttribute('duration'));
-                                                                    //console.log(options);
-                                                                }
+                                                                
                                                                 var lat = parseFloat(this.element.getAttribute('lat'));
                                                                 var lng = parseFloat(this.element.getAttribute('lng'));
                                                                 var zoom = parseFloat(this.element.getAttribute('zoom'));
-                                                                map.flyTo({lon: lng, lat: lat},zoom,options);
+                                                                map.flyTo({lon: lng, lat: lat}, zoom, options);
+                                                            } else if (this.element.hasAttribute('location')) {
+                                                                var hash = this.element.getAttribute('location').split('/');
+                                                                if (hash.length == 3) {
+                                                                    var lat = parseFloat(location[1]);
+                                                                    var lng = parseFloat(location[2]);
+                                                                    var zoom = parseFloat(location[0]);
+                                                                    map.flyTo({lon: lng, lat: lat}, zoom, options);
+                                                                }
                                                             }
-                                                            // if (window.timeSlider && window.timeSlider.noUiSlider && this.element.hasAttribute('hour')) {
-                                                            //     var hour = (parseFloat(this.element.getAttribute('hour')) - 1 )% 24;
-                                                            //     window.timeSlider.noUiSlider.set(hour)
-                                                            // }
                                                         },
                                                         offset: markers_offset
                                                     } ));
@@ -140,6 +144,10 @@ L.UxNarrative = L.Control.extend({
         container.addEventListener('mouseup', function(event) {
             // console.log('mouseup container');
             map.dragging.enable();
+        });
+
+        window.addEventListener('resize', function(event) {
+            resize_container();
         });
 
         icon.addEventListener('click', function(event) {
