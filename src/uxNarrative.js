@@ -24,6 +24,8 @@ L.UxNarrative = L.Control.extend({
         var ignore_up = this.options.ignore_up;
         var markers_offset = this.options.markers_offset;
 
+        var default_draggin = map.dragging._enabled;
+
         // CONTAINER
         // -------------------------------------------------------------
         var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom ux_narrative-container');
@@ -105,19 +107,26 @@ L.UxNarrative = L.Control.extend({
         // EVENTS 
         map.on('mouseover', function(event) { 
             // console.log('mouseover map');
-            map.dragging.enable();
+            if (default_draggin) {
+                map.dragging.enable();
+            }
+            
             map.scrollWheelZoom.enable();
         });
 
         map.addEventListener('click', function() { 
             // console.log('click map');
-            map.dragging.enable();
+            if (default_draggin) {
+                map.dragging.enable();
+            }
             map.scrollWheelZoom.enable(); 
         });
 
         map.addEventListener('mousedown', function(event) {
             // console.log('map container');
-            map.dragging.enable();
+            if (default_draggin) {
+                map.dragging.enable();
+            }
             map.scrollWheelZoom.enable();
         });
 
@@ -129,21 +138,29 @@ L.UxNarrative = L.Control.extend({
 
         container.addEventListener('mousedown', function(event) {
             // console.log('mousedown container');
-            map.dragging.disable();
+            if (default_draggin) {
+                map.dragging.disable();
+            }
+            
             map.scrollWheelZoom.disable(); 
             event.stopPropagation();
         });
 
         container.addEventListener('click', function(event) {
             // console.log('click container');
-            map.dragging.disable();
+            if (default_draggin) {
+                map.dragging.disable();
+            }
+            
             map.scrollWheelZoom.disable(); 
             event.stopPropagation();
         });
 
         container.addEventListener('mouseup', function(event) {
             // console.log('mouseup container');
-            map.dragging.enable();
+            if (default_draggin) {
+                map.dragging.enable();
+            }
         });
 
         window.addEventListener('resize', function(event) {
