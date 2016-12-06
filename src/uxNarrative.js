@@ -10,7 +10,7 @@ L.UxNarrative = L.Control.extend({
         start_open: false,
         ignore_up: false,
         markers_offset: '100%',
-        width: 500
+        width: '500px'
     },
 
     initialize: function(options) {
@@ -92,7 +92,7 @@ L.UxNarrative = L.Control.extend({
         function resize_container() {
             if (state_open) {
                 var bbox = container.getBoundingClientRect();
-                container.style.width = container_width + 'px';
+                container.style.width = container_width;
                 container.style.height = (window.innerHeight-Math.min(bbox.top,bbox.bottom)-Math.min(bbox.right,bbox.left))+'px';
                 markdown_container.style.visibility = "visible";
             } else {
