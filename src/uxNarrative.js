@@ -7,6 +7,9 @@ L.UxNarrative = L.Control.extend({
         story: 'ux_narrative.md',
         position: 'topleft',
         icon: 'https://tangrams.github.io/ux_narrative/ux_narrative.png',
+        start_open: false,
+        ignore_up: false,
+        markers_offset: '100%',
         width: 500
     },
 
@@ -17,32 +20,20 @@ L.UxNarrative = L.Control.extend({
     onAdd: function(map) {
         var icon_size = 26;
         var container_width = this.options.width;
-        var state_open = false;
+        var state_open = this.options.start_open;
+        var ignore_up = this.options.ignore_up;
+        var markers_offset = this.options.markers_offset;
 
         // CONTAINER
         // -------------------------------------------------------------
         var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom ux_narrative-container');
-        container.addEventListener('mousedown', function(e) {
-            console.log('mousedown container');
-            map.dragging.disable();
-            map.scrollWheelZoom.disable(); 
-            e.stopPropagation();
-        });
-
-        container.addEventListener('mouseup', function(e) {
-            console.log('mouseup container');
-            map.dragging.enable();
-        });
-
-        // map.on('focus', function() { map.scrollWheelZoom.enable(); });
-        // map.on('blur', function() { map.scrollWheelZoom.disable(); });
 
         // ICON
         // -------------------------------------------------------------
         var icon =  L.DomUtil.create('img', 'ux_narrative-icon', container);
         icon.src = this.options.icon;
 
-        var story = L.DomUtil.create('div', 'ux_narrative-story', container);
+        var markdown_container = L.DomUtil.create('div', 'ux_narrative-story', container);
         var waypoints = []
         function loadStory (url) {
             // Make the request and wait for the reply
@@ -57,15 +48,14 @@ L.UxNarrative = L.Control.extend({
                     return response.text();
                 })
                 .then(function(content) {
-                    story.innerHTML = marked(content);
-                    var markers = story.getElementsByClassName('marker');
+                    markdown_container.innerHTML = marked(content);
+                    var markers = markdown_container.getElementsByClassName('marker');
                     for (var i = 0; i < markers.length; i++ ) {
                         waypoints.push(new Waypoint( {
                                                         element: markers[i],
-                                                        context: container,
+                                                        context: markdown_container,
                                                         handler: function(direction) {
-                                                            //console.log(this.element);
-                                                            //if (direction == 'up') { return; }
+                                                            if (ignore_up && direction == 'up') { return; }
 
                                                             if (this.element.hasAttribute('lat')&&
                                                                 this.element.hasAttribute('lng')&&
@@ -86,44 +76,71 @@ L.UxNarrative = L.Control.extend({
                                                             //     window.timeSlider.noUiSlider.set(hour)
                                                             // }
                                                         },
-                                                        offset: '100%'
+                                                        offset: markers_offset
                                                     } ));
                     }
                 })
             window.waypoints = waypoints;
         }
 
-        loadStory (this.options.story); 
-        story.style.visibility = "hidden";
-
-        container.addEventListener('mouseover', function() { 
-            console.log('mouseover story');
-            map.scrollWheelZoom.disable(); 
-        });
-
-        map.on('mouseover', function() { 
-            console.log('mouseover map');
-        });
-
-        map.addEventListener('click', function() { 
-            console.log('click map');
-            map.scrollWheelZoom.enable(); 
-        });
+        loadStory(this.options.story); 
 
         function resize_container() {
             if (state_open) {
                 var bbox = container.getBoundingClientRect();
                 container.style.width = container_width + 'px';
                 container.style.height = (window.innerHeight-Math.min(bbox.top,bbox.bottom)-Math.min(bbox.right,bbox.left))+'px';
-                container.style.overflow = 'scroll';
-                story.style.visibility = "visible";
+                markdown_container.style.visibility = "visible";
             } else {
                 container.style.width = icon_size+'px';
                 container.style.height = icon_size+'px';
-                container.style.overflow = 'hidden';
-                story.style.visibility = "hidden";
+                markdown_container.style.visibility = "hidden";
             }
         }
+
+        // EVENTS 
+        map.on('mouseover', function(event) { 
+            // console.log('mouseover map');
+            map.dragging.enable();
+            map.scrollWheelZoom.enable();
+        });
+
+        map.addEventListener('click', function() { 
+            // console.log('click map');
+            map.dragging.enable();
+            map.scrollWheelZoom.enable(); 
+        });
+
+        map.addEventListener('mousedown', function(event) {
+            // console.log('map container');
+            map.dragging.enable();
+            map.scrollWheelZoom.enable();
+        });
+
+        container.addEventListener('mouseover', function(event) { 
+            // console.log('mouseover story');
+            map.scrollWheelZoom.disable(); 
+            event.stopPropagation();
+        });
+
+        container.addEventListener('mousedown', function(event) {
+            // console.log('mousedown container');
+            map.dragging.disable();
+            map.scrollWheelZoom.disable(); 
+            event.stopPropagation();
+        });
+
+        container.addEventListener('click', function(event) {
+            // console.log('click container');
+            map.dragging.disable();
+            map.scrollWheelZoom.disable(); 
+            event.stopPropagation();
+        });
+
+        container.addEventListener('mouseup', function(event) {
+            // console.log('mouseup container');
+            map.dragging.enable();
+        });
 
         icon.addEventListener('click', function(event) {
             state_open = !state_open;
