@@ -9,7 +9,7 @@ L.UxNarrative = L.Control.extend({
         icon: 'https://tangrams.github.io/ux_narrative/ux_narrative.png',
         start_open: false,
         ignore_up: false,
-        markers_offset: '100%',
+        markers_offset: '10%',
         width: '500px'
     },
 
@@ -59,7 +59,8 @@ L.UxNarrative = L.Control.extend({
                                                         handler: function(direction) {
                                                             if (ignore_up && direction == 'up') { return; }
 
-                                                            var options = { animate: true, duration: 1., easeLinearity: 1};
+                                                            var options = { animate: true, duration: 1., easeLinearity: 10.};
+
                                                             if (this.element.hasAttribute('duration')) {
                                                                 options.duration = parseFloat(this.element.getAttribute('duration'));
                                                             }
@@ -75,9 +76,10 @@ L.UxNarrative = L.Control.extend({
                                                             } else if (this.element.hasAttribute('location')) {
                                                                 var hash = this.element.getAttribute('location').split('/');
                                                                 if (hash.length == 3) {
-                                                                    var lat = parseFloat(location[1]);
-                                                                    var lng = parseFloat(location[2]);
-                                                                    var zoom = parseFloat(location[0]);
+                                                                    var lat = parseFloat(hash[1]);
+                                                                    var lng = parseFloat(hash[2]);
+                                                                    var zoom = parseFloat(hash[0]);
+                                                                    console.log({lon: lng, lat: lat}, zoom, options);
                                                                     map.flyTo({lon: lng, lat: lat}, zoom, options);
                                                                 }
                                                             }
