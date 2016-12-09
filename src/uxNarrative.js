@@ -88,7 +88,7 @@ L.UxNarrative = L.Control.extend({
                                                     } ));
                     }
                 })
-            window.waypoints = waypoints;
+            resize_container()
         }
 
         loadStory(this.options.story); 
@@ -97,7 +97,8 @@ L.UxNarrative = L.Control.extend({
             if (state_open) {
                 var bbox = container.getBoundingClientRect();
                 container.style.width = container_width;
-                container.style.height = (window.innerHeight-Math.min(bbox.top,bbox.bottom)-Math.min(bbox.right,bbox.left))+'px';
+                console.log((window.innerHeight-Math.min(bbox.top,bbox.bottom)));
+                container.style.height = (window.innerHeight-Math.min(bbox.top,bbox.bottom)-10.)+'px';
                 markdown_container.style.visibility = "visible";
             } else {
                 container.style.width = icon_size+'px';
@@ -149,7 +150,6 @@ L.UxNarrative = L.Control.extend({
         });
 
         container.addEventListener('click', function(event) {
-            // console.log('click container');
             if (default_draggin) {
                 map.dragging.disable();
             }
@@ -159,7 +159,6 @@ L.UxNarrative = L.Control.extend({
         });
 
         container.addEventListener('mouseup', function(event) {
-            // console.log('mouseup container');
             if (default_draggin) {
                 map.dragging.enable();
             }
@@ -174,8 +173,6 @@ L.UxNarrative = L.Control.extend({
             resize_container();
             event.stopPropagation();
         });
-
-        resize_container();
 
         return container;
     },
