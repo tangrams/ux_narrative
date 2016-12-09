@@ -36,6 +36,20 @@ L.UxNarrative = L.Control.extend({
         icon.src = this.options.icon;
 
         var markdown_container = L.DomUtil.create('div', 'ux_narrative-story', container);
+
+        function resize_container() {
+            if (state_open) {
+                var bbox = container.getBoundingClientRect();
+                container.style.width = container_width;
+                container.style.height = (window.innerHeight-Math.min(bbox.top,bbox.bottom)-10.)+'px';
+                markdown_container.style.visibility = "visible";
+            } else {
+                container.style.width = icon_size+'px';
+                container.style.height = icon_size+'px';
+                markdown_container.style.visibility = "hidden";
+            }
+        }
+        
         var waypoints = []
         function loadStory (url) {
             // Make the request and wait for the reply
@@ -89,21 +103,6 @@ L.UxNarrative = L.Control.extend({
                     }
                 })
             resize_container()
-        }
-
-        loadStory(this.options.story); 
-
-        function resize_container() {
-            if (state_open) {
-                var bbox = container.getBoundingClientRect();
-                container.style.width = container_width;
-                container.style.height = (window.innerHeight-Math.min(bbox.top,bbox.bottom)-10.)+'px';
-                markdown_container.style.visibility = "visible";
-            } else {
-                container.style.width = icon_size+'px';
-                container.style.height = icon_size+'px';
-                markdown_container.style.visibility = "hidden";
-            }
         }
 
         // EVENTS 
@@ -172,6 +171,8 @@ L.UxNarrative = L.Control.extend({
             resize_container();
             event.stopPropagation();
         });
+
+        loadStory(this.options.story); 
 
         return container;
     },
