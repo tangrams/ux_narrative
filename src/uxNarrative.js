@@ -97,7 +97,6 @@ L.UxNarrative = L.Control.extend({
             if (state_open) {
                 var bbox = container.getBoundingClientRect();
                 container.style.width = container_width;
-                console.log((window.innerHeight-Math.min(bbox.top,bbox.bottom)));
                 container.style.height = (window.innerHeight-Math.min(bbox.top,bbox.bottom)-10.)+'px';
                 markdown_container.style.visibility = "visible";
             } else {
