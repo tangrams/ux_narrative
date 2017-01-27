@@ -1,6 +1,6 @@
 import marked from 'marked'
 import waypoint from 'waypoints/lib/noframework.waypoints.js'
-
+import 'whatwg-fetch'
 
 L.UxNarrative = L.Control.extend({
     options: {

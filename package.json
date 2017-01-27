@@ -59,8 +59,8 @@
   },
   "dependencies": {
     "brfs": "1.4.3",
-    "fetch-ponyfill": "^3.0.2",
     "marked": "^0.3.6",
-    "waypoints": "^4.0.1"
+    "waypoints": "^4.0.1",
+    "whatwg-fetch": "^2.0.2"
   }
 }
